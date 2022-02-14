@@ -12,10 +12,14 @@ type ClusterRedisCounter struct {
 
 func NewWithCluster(addrs []string, password string, counterKey string) *ClusterRedisCounter {
 	rdb := redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs: addrs,
+		Addrs:    addrs,
 		Password: password,
 	})
 	return &ClusterRedisCounter{client: rdb, counterKey: counterKey}
+}
+
+func NewWithClient(client *redis.ClusterClient, counterKey string) *ClusterRedisCounter {
+	return &ClusterRedisCounter{client: client, counterKey: counterKey}
 }
 
 func (rc *ClusterRedisCounter) Next() (uint64, error) {
